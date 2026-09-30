@@ -6,10 +6,13 @@
 services:
   stream:
     image: gokulsouthern/stream_home:latest
+    pull_policy: always
     ports:
       - "5001:5001"
     devices:
-      - ${CAMERA_DEVICE:-/dev/video0}:${CAMERA_DEVICE:-/dev/video0}
+      - /dev/video0:/dev/video0
+      - /dev/video1:/dev/video1
+      - /dev/media0:/dev/media0
       - /dev/snd:/dev/snd
     group_add:
       - video
@@ -18,7 +21,7 @@ services:
       CAMERA_DEVICE: ${CAMERA_DEVICE:-/dev/video0}
       CAMERA_FORMAT: ${CAMERA_FORMAT:-mjpeg}
       CAMERA_SIZE: ${CAMERA_SIZE:-1280x720}
-      CAMERA_FPS: ${CAMERA_FPS:-25}
+      CAMERA_FPS: ${CAMERA_FPS:-30}
       AUDIO_DEVICE: ${AUDIO_DEVICE:-plughw:1,0}
       RTSP_URL: rtsp://mediamtx:8554/cam
       PUBLISH_URL: rtsp://mediamtx:8554/cam
@@ -27,6 +30,7 @@ services:
 
   mediamtx:
     image: bluenviron/mediamtx:latest
+    pull_policy: always
     ports:
       - "8554:8554"
     restart: unless-stopped

@@ -298,4 +298,9 @@ async def hls(name: str) -> FileResponse:
 
 @app.get("/health")
 async def health() -> dict:
-    return {"streaming": (HLS_DIR / "index.m3u8").is_file()}
+    return {
+        "streaming": (HLS_DIR / "index.m3u8").is_file(),
+        "source": "server-camera" if CAMERA_DEVICE else "rtsp-or-browser",
+        "camera": CAMERA_DEVICE or None,
+        "audio": AUDIO_DEVICE or None,
+    }
